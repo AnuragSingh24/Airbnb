@@ -25,11 +25,17 @@ public class Hotel {
     private String city;
 
 
-    @Column(columnDefinition = "TEXT[]") //we can store the array of text here
-    private  String[] photos;
 
-    @Column(columnDefinition = "TEXT[]")
-    private String[] amenities;
+    @ElementCollection
+    @CollectionTable(name = "hotel_photos", joinColumns = @JoinColumn(name = "hotel_id"))
+    @Column(name = "photo")
+    private List<String> photos;
+
+    @ElementCollection
+    @CollectionTable(name = "hotel_amenities", joinColumns = @JoinColumn(name = "hotel_id"))
+    @Column(name = "amenity")
+    private List<String> amenities;
+
 
     @CreationTimestamp //automatically updated when we create
     private LocalDateTime createdAt;

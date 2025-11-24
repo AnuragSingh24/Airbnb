@@ -34,7 +34,7 @@ public class RoomServiceImpl implements  RoomService {
         room = roomRepository.save(room);
 
 
-        if(hotel.getActive()){
+        if(hotel.getActive()){  //if the room is active then create the inventory
            inventoryService.intializeRoomForAYear(room);
         }
 
@@ -69,7 +69,7 @@ public class RoomServiceImpl implements  RoomService {
         Room room = roomRepository.findById(roomId)
                 .orElseThrow(() -> new ResourceNotFoundException("Room not found"));
 
-     inventoryService.deletFutureInventories(room);
+     inventoryService.deleteAllInventories(room);
         roomRepository.deleteById(roomId);
 
         //its getting error

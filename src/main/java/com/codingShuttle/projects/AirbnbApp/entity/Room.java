@@ -1,5 +1,6 @@
 package com.codingShuttle.projects.AirbnbApp.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,6 +24,7 @@ public class Room {
     //connection to the hotel
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "hotel_id" , nullable = false)
+    @JsonIgnore
     private  Hotel hotel;
 
 
@@ -31,13 +34,20 @@ public class Room {
     @Column(nullable = false , precision = 10 , scale = 2)
     private BigDecimal basePrice;
 
-    @Column(columnDefinition = "TEXT[]") //we can store the array of text here
-    private  String[] photos;
 
-    @Column(columnDefinition = "TEXT[]")
-    private String[] amenities;
 
-   @Column(nullable = false)
+    @ElementCollection
+    @CollectionTable(name = "room_photos", joinColumns = @JoinColumn(name = "room_id"))
+    @Column(name = "photo")
+    private List<String> photos;
+
+    @ElementCollection
+    @CollectionTable(name = "room_amenities", joinColumns = @JoinColumn(name = "room_id"))
+    @Column(name = "amenity")
+    private List<String> amenities;
+
+
+    @Column(nullable = false)
     private Integer totalCount;
 
     @Column(nullable = false)

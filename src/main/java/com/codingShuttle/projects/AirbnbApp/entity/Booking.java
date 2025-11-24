@@ -2,11 +2,11 @@ package com.codingShuttle.projects.AirbnbApp.entity;
 
 import com.codingShuttle.projects.AirbnbApp.entity.enums.BookingStatus;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -14,6 +14,10 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
+@AllArgsConstructor
+
+@NoArgsConstructor
 public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,9 +51,7 @@ public class Booking {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_id")
-    private Payment payment;
+
 
     @Enumerated(EnumType.STRING) //this col have only the value that are present in the enum
     @Column(nullable = false)
@@ -63,5 +65,8 @@ public class Booking {
     )
 
    private Set<Guest> guests;
+
+    @Column(nullable = false , precision = 10 , scale = 2)
+    private BigDecimal amount;
 
 }

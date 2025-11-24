@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.awt.print.Book;
 import java.math.BigDecimal;
 
 @Entity
@@ -27,4 +28,7 @@ public class Payment {
 
    @Column(nullable = false , precision = 10 , scale = 2)
    private BigDecimal amount;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    private Booking booking;
 }
