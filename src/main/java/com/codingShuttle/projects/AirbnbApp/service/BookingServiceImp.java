@@ -6,11 +6,13 @@ import com.codingShuttle.projects.AirbnbApp.dto.GuestDto;
 import com.codingShuttle.projects.AirbnbApp.entity.*;
 import com.codingShuttle.projects.AirbnbApp.entity.enums.BookingStatus;
 import com.codingShuttle.projects.AirbnbApp.exception.ResourceNotFoundException;
+import com.codingShuttle.projects.AirbnbApp.exception.UnAuthorisedException;
 import com.codingShuttle.projects.AirbnbApp.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -104,6 +106,13 @@ public class BookingServiceImp implements BookingService{
         Booking booking = bookingRepository.findById(bookingId).orElseThrow(() ->
                 new ResourceNotFoundException("Booking not found with id {}" + bookingId));
 
+        User user = getCurrentUser();
+
+        if(user.equals(booking.getUser()))
+        {
+            throw  new UnAuthorisedException("Booking does not belong to this user with id :" + user.getId() );
+        }
+
         if(hasBookingExpired(booking))
         {
             throw new IllegalStateException("Booking has expired");
@@ -117,7 +126,7 @@ public class BookingServiceImp implements BookingService{
         for(GuestDto guest : guestDto)
         {
             Guest guestEntity = modelMapper.map(guest, Guest.class);
-            guestEntity.setUser(getCurrentUser());
+            guestEntity.setUser(user);
             guestEntity = guestRepository.save(guestEntity);
             booking.getGuests().add(guestEntity);  //add the guest in booking also
         }
@@ -144,10 +153,6 @@ public class BookingServiceImp implements BookingService{
 
     public User getCurrentUser()
     {
-            User newUser = new User();
-            newUser.setEmail("test@example.com");
-            newUser.setPassword("password");
-            newUser.setName("Test User");
-            return userRepository.save(newUser);
+        return (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 }
