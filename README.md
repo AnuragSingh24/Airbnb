@@ -1,129 +1,165 @@
-**Airbnb API Summary**
-**Hotel**
-Create hotel
+Airbnb API Documentation
+Hotel
+Create Hotel
 Method: POST
-Path: unknown
-Input:
-{    "name": "string",    "city": "string",    "photos": [        "string"    ],    "amenities": [        "string"    ],    "contactInfo": {        "location": "string",        "phoneNumber": "string",        "email": "string",        "address": "string"    },    "active": "boolean"}
+Path: /api/v1/admin/hotels
+Request Body:
 {
-    "name": "string",
-    "city": "string",
-    "photos": [
-        "string"
-    ],
-    "amenities": [
-        "string"
-    ],
-    "contactInfo": {
+  "name": "string",
+  "city": "string",
+  "photos": ["string"],
+  "amenities": ["string"],
+  "contactInfo": {
+    "location": "string",
+    "phoneNumber": "string",
+    "email": "string",
+    "address": "string"
+  },
+  "active": true
+}
 
-Output: unknown
-Update the hotel
+Response: Hotel details
+
+Update Hotel
 Method: PUT
-Path: /api/v1/admin/hotels/2
-Input:
-Same as Create hotel
-Output: unknown
-Get hotel by Id
+Path: /api/v1/admin/hotels/{hotelId}
+Request Body: Same as Create Hotel
+Response: Updated hotel details
+
+Get Hotel by ID
 Method: GET
-Path: /api/v1/admin/hotels/2
-Input: unknown
-Output:
-{    "name": "string",    "city": "string",    "photos": [    "amenities": [    "contactInfo": {        "location": "string",        "phoneNumber": "string",        "email": "string",        "string"    ],        "string"    ],        "address": "string"    },    "active": "boolean"}
+Path: /api/v1/admin/hotels/{hotelId}
+Response:
 {
-    "name": "string",
-    "city": "string",
-    "photos": [
-        "string"
-    ],
-    "amenities": [
-        "string"
-    ],
-    "contactInfo": {
+  "name": "string",
+  "city": "string",
+  "photos": ["string"],
+  "amenities": ["string"],
+  "contactInfo": {
+    "location": "string",
+    "phoneNumber": "string",
+    "email": "string",
+    "address": "string"
+  },
+  "active": true
+}
 
-Activate the hotel
+
+Activate Hotel
 Method: PUT
-Path: /api/v1/admin/hotels/4/activate
-Input: unknown
-Output: unknown
-Delete the hotel
-Method: DELETE
-Path: /api/v1/admin/hotels/3
-Input: unknown
-Output: unknown
-Room
-Create Rooms
-Method: POST
-Path: /api/v1/admin/hotels/1/rooms
-Input:
-{    "id": "integer",    "type": "string",    "basePrice": "number",    "photos": [    "amenities": [        "string"    ],        "string"    ],    "totalCount": "integer",    "capacity": "integer"}
-{
-    "id": "integer",
-    "type": "string",
-    "basePrice": "number",
-    "photos": [
-        "string"
-    ],
-    "amenities": [
-        "string"
-    ],
+Path: /api/v1/admin/hotels/{hotelId}/activate
+Response: Hotel activation status
 
-Output: unknown
-**Auth**
+Delete Hotel
+Method: DELETE
+Path: /api/v1/admin/hotels/{hotelId}
+Response: Deletion status
+
+Room
+Create Room
+Method: POST
+Path: /api/v1/admin/hotels/{hotelId}/rooms
+Request Body:
+{
+  "type": "string",
+  "basePrice": 100.0,
+  "photos": ["string"],
+  "amenities": ["string"],
+  "totalCount": 10,
+  "capacity": 2
+}
+
+Response: Room details
+
+Auth
 Signup
 Method: POST
 Path: /api/v1/auth/signup
-Input:
-{    "name": "string",    "email": "string",    "password": "string"}
+Request Body:
 {
-    "name": "string",
-    "email": "string",
-    "password": "string"
+  "name": "string",
+  "email": "string",
+  "password": "string"
 }
-Output: unknown
+
+Response: User details
+
 Login
 Method: POST
 Path: /api/v1/auth/login
-Input:
-{    "email": "string",    "password": "string"}
+Request Body:
 {
-    "email": "string",
-    "password": "string"
+  "email": "string",
+  "password": "string"
 }
-Output: unknown
+
+Response: JWT Token
+
 Logout
 Method: POST
-Path: unknown
-Input: unknown
-Output: unknown
-**Bookings**
-Search
+Path: /api/v1/auth/logout
+Response: Logout status
+
+Bookings
+Search Hotels
 Method: GET
 Path: /api/v1/hotels/search
-Input:
-{    "city": "string",    "startDate": "string",    "endDate": "string",    "page": "integer",    "size": "integer"}
-{
-    "city": "string",
-    "startDate": "string",
-    "endDate": "string",
-    "page": "integer",
-    "size": "integer"
-}
-Output: unknown
-Get hotel Info
+Query Params:
+city=string
+startDate=yyyy-MM-dd
+endDate=yyyy-MM-dd
+page=integer
+size=integer
+
+Response: List of hotels
+
+Get Hotel Info
 Method: GET
-Path: /api/v1/hotels/1/info
-Input: unknown
-Output: unknown
-Initailise booking
+Path: /api/v1/hotels/{hotelId}/info
+Response: Hotel details
+
+Initialize Booking
 Method: POST
 Path: /api/v1/bookings/init
-Input:
-{    "hotelId": "string",    "roomId": "string",    "checkInDate": "string",    "checkOutDate": "string",    "roomCount": "string"}
+Request Body:
 {
-    "hotelId": "string",
-    "roomId": "string",
-    "checkInDate": "string",
-    "checkOutDate": "string",
-    "roomCount": "string"
+  "hotelId": "string",
+  "roomId": "string",
+  "checkInDate": "yyyy-MM-dd",
+  "checkOutDate": "yyyy-MM-dd",
+  "roomCount": 1
 }
-Output: unknown
+
+Response: Booking details
+
+Guests
+Add Guests to Booking
+Method: POST
+Path: /api/v1/bookings/{bookingId}/guests
+Request Body (Array of Guests):
+[
+  {
+    "name": "Alice Johnson",
+    "gender": "FEMALE",
+    "age": 28
+  },
+  {
+    "name": "Robert Smith",
+    "gender": "MALE",
+    "age": 32
+  }
+]
+
+Response: Updated Booking with Guests
+Notes:
+
+gender must be one of: MALE, FEMALE, OTHER.
+age must be an integer.
+If you include user reference:
+
+{
+  "user": { "username": "john_doe" },
+  "name": "Alice Johnson",
+  "gender": "FEMALE",
+  "age": 28
+}
