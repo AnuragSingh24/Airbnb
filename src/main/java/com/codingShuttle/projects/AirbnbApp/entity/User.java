@@ -1,6 +1,7 @@
 package com.codingShuttle.projects.AirbnbApp.entity;
 
 import com.codingShuttle.projects.AirbnbApp.entity.enums.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class User implements UserDetails {
     private String email;
 
     @Column(nullable = false)
+    @JsonIgnore
     private String password; //encode it
 
 
